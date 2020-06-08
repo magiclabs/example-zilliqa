@@ -1,1 +1,1 @@
-# example-zilliaq
+# example-zilliqa
