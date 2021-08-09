@@ -50,14 +50,14 @@ export default function App() {
     const msgVersion = 1; // current msgVersion
     const VERSION = bytes.pack(chainId, msgVersion);
 
-    const myGasPrice = units.toQa('1000', units.Units.Li);
+    const myGasPrice = units.toQa('0.1', units.Units.Zil);
 
     const params = {
       version: VERSION,
       toAddr: destinationAddress,
       amount: (new BN(units.toQa(sendZilAmount, units.Units.Zil))), // Sending an amount in Zil (1) and converting the amount to Qa
       gasPrice: myGasPrice, // Minimum gasPrice veries. Check the `GetMinimumGasPrice` on the blockchain
-      gasLimit: Long.fromNumber(1),
+      gasLimit: Long.fromNumber(50),
     };
 
     setSendingTransaction(true);
@@ -140,7 +140,7 @@ export default function App() {
     const msgVersion = 1; // current msgVersion
     const VERSION = bytes.pack(chainId, msgVersion);
 
-    const myGasPrice = units.toQa('1000', units.Units.Li);
+    const myGasPrice = units.toQa('0.1', units.Units.Zil);
 
     const params = {
       version: VERSION,
