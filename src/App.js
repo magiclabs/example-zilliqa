@@ -4,7 +4,7 @@ import { Magic } from "magic-sdk";
 import { ZilliqaExtension } from "@magic-ext/zilliqa";
 const { BN, Long, bytes, units } = require('@zilliqa-js/util');
 
-const magic = new Magic("pk_test_EDF0307A9991979E", {
+const magic = new Magic("pk_live_91877E108955732E", {
   extensions: {
     zilliqa: new ZilliqaExtension({
       rpcUrl: 'https://dev-api.zilliqa.com'
