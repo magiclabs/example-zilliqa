@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 import { Magic } from "magic-sdk";
 import { ZilliqaExtension } from "@magic-ext/zilliqa";
-const { BN, Long, bytes, units } = require('@zilliqa-js/util');
+const { BN, Long, bytes, units } = require("@zilliqa-js/util");
 
-const magic = new Magic("pk_live_91877E108955732E", {
+const magic = new Magic("pk_live_F10371255F025272", {
   extensions: {
     zilliqa: new ZilliqaExtension({
-      rpcUrl: 'https://dev-api.zilliqa.com'
-    })
-  }
+      rpcUrl: "https://dev-api.zilliqa.com",
+    }),
+  },
 });
 
 export default function App() {
@@ -25,7 +25,7 @@ export default function App() {
   const [deployingContract, setDeployingContract] = useState(false);
 
   useEffect(() => {
-    magic.user.isLoggedIn().then(async magicIsLoggedIn => {
+    magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
       setIsLoggedIn(magicIsLoggedIn);
       if (magicIsLoggedIn) {
         const publicAddress = (await magic.zilliqa.getWallet()).bech32Address;
@@ -50,28 +50,25 @@ export default function App() {
     const msgVersion = 1; // current msgVersion
     const VERSION = bytes.pack(chainId, msgVersion);
 
-    const myGasPrice = units.toQa('0.1', units.Units.Zil);
+    const myGasPrice = units.toQa("0.1", units.Units.Zil);
 
     const params = {
       version: VERSION,
       toAddr: destinationAddress,
-      amount: (new BN(units.toQa(sendZilAmount, units.Units.Zil))), // Sending an amount in Zil (1) and converting the amount to Qa
+      amount: new BN(units.toQa(sendZilAmount, units.Units.Zil)), // Sending an amount in Zil (1) and converting the amount to Qa
       gasPrice: myGasPrice, // Minimum gasPrice veries. Check the `GetMinimumGasPrice` on the blockchain
       gasLimit: Long.fromNumber(50),
     };
 
     setSendingTransaction(true);
 
-    const tx = await magic.zilliqa.sendTransaction(
-        params,
-        false,
-    );
+    const tx = await magic.zilliqa.sendTransaction(params, false);
 
     setSendingTransaction(false);
 
     setTxHash(tx.id);
 
-    console.log('send transaction', tx)
+    console.log("send transaction", tx);
   };
 
   const handleDeployContract = async () => {
@@ -125,13 +122,13 @@ export default function App() {
     const init = [
       // this parameter is mandatory for all init arrays
       {
-        vname: '_scilla_version',
-        type: 'Uint32',
-        value: '0',
+        vname: "_scilla_version",
+        type: "Uint32",
+        value: "0",
       },
       {
-        vname: 'owner',
-        type: 'ByStr20',
+        vname: "owner",
+        type: "ByStr20",
         value: `${address}`,
       },
     ];
@@ -140,35 +137,39 @@ export default function App() {
     const msgVersion = 1; // current msgVersion
     const VERSION = bytes.pack(chainId, msgVersion);
 
-    const myGasPrice = units.toQa('0.1', units.Units.Zil);
+    const myGasPrice = units.toQa("0.1", units.Units.Zil);
 
     const params = {
       version: VERSION,
       gasPrice: myGasPrice,
       gasLimit: Long.fromNumber(10000),
-    }
+    };
     setDeployingContract(true);
 
     const result = await magic.zilliqa.deployContract(
-        init, code, params, 33, 1000, false
-    )
+      init,
+      code,
+      params,
+      33,
+      1000,
+      false
+    );
 
     setDeployingContract(false);
 
     setContractTxHash(result.id);
 
-    console.log('deploy contract', result);
+    console.log("deploy contract", result);
   };
 
   const handleCallContract = async () => {
-
-    const newMsg = 'Hello, test call contract' ;
+    const newMsg = "Hello, test call contract";
 
     const chainId = 333; // chainId of the developer testnet
     const msgVersion = 1; // current msgVersion
     const VERSION = bytes.pack(chainId, msgVersion);
 
-    const myGasPrice = units.toQa('1000', units.Units.Li);
+    const myGasPrice = units.toQa("1000", units.Units.Li);
 
     const params = {
       // amount, gasPrice and gasLimit must be explicitly provided
@@ -176,24 +177,29 @@ export default function App() {
       amount: new BN(0),
       gasPrice: myGasPrice,
       gasLimit: Long.fromNumber(8000),
-    }
+    };
 
     const args = [
       {
-        vname: 'msg',
-        type: 'String',
+        vname: "msg",
+        type: "String",
         value: newMsg,
       },
     ];
 
-    const contractAddress = '0x92867f6C65933bADB3F3e02A36Cf3ad85fE5155b';
+    const contractAddress = "0x92867f6C65933bADB3F3e02A36Cf3ad85fE5155b";
 
     const result = await magic.zilliqa.callContract(
-        'setHello', args, params, 33, 1000, false, contractAddress
+      "setHello",
+      args,
+      params,
+      33,
+      1000,
+      false,
+      contractAddress
     );
 
-    console.log('call contract', result)
-
+    console.log("call contract", result);
   };
 
   return (
@@ -206,7 +212,7 @@ export default function App() {
             name="email"
             required="required"
             placeholder="Enter your email"
-            onChange={event => {
+            onChange={(event) => {
               setEmail(event.target.value);
             }}
           />
@@ -243,9 +249,9 @@ export default function App() {
                   </a>
                 </div>
               </div>
-            ) : sendingTransaction ? (<div className="sending-status">
-              Sending transaction
-            </div>) : (
+            ) : sendingTransaction ? (
+              <div className="sending-status">Sending transaction</div>
+            ) : (
               <div />
             )}
             <input
@@ -254,7 +260,7 @@ export default function App() {
               className="full-width"
               required="required"
               placeholder="Destination address"
-              onChange={event => {
+              onChange={(event) => {
                 setDestinationAddress(event.target.value);
               }}
             />
@@ -264,7 +270,7 @@ export default function App() {
               className="full-width"
               required="required"
               placeholder="Amount in Zil"
-              onChange={event => {
+              onChange={(event) => {
                 setSendZilAmount(event.target.value);
               }}
             />
@@ -274,11 +280,11 @@ export default function App() {
           </div>
           <div className="container">
             <h1>Smart Contract</h1>
-            {
-              deployingContract ? <div className="sending-status">
-                Deploying contract
-              </div> : ''
-            }
+            {deployingContract ? (
+              <div className="sending-status">Deploying contract</div>
+            ) : (
+              ""
+            )}
             <div className="info">
               <a
                 href={`https://viewblock.io/zilliqa/tx/${contractTxHash}?network=testnet`}
