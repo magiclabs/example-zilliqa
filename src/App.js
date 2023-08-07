@@ -36,7 +36,7 @@ export default function App() {
   }, [isLoggedIn]);
 
   const login = async () => {
-    await magic.auth.loginWithMagicLink({ email });
+    await magic.auth.loginWithEmailOTP({ email });
     setIsLoggedIn(true);
   };
 
@@ -72,6 +72,8 @@ export default function App() {
   };
 
   const handleDeployContract = async () => {
+    setDeployingContract(true);
+
     const wallet = await magic.zilliqa.getWallet();
 
     const address = wallet.address;
@@ -144,7 +146,6 @@ export default function App() {
       gasPrice: myGasPrice,
       gasLimit: Long.fromNumber(10000),
     };
-    setDeployingContract(true);
 
     const result = await magic.zilliqa.deployContract(
       init,
@@ -230,8 +231,14 @@ export default function App() {
               <a
                 href={`https://viewblock.io/zilliqa/address/${publicAddress}?network=testnet`}
                 target="_blank"
+                rel="noreferrer"
               >
                 {publicAddress}
+              </a>
+            </div>
+            <div>
+              <a href="https://dev-wallet.zilliqa.com/faucet?network=testnet" target="_blank" rel="noreferrer">
+                Faucet
               </a>
             </div>
           </div>
